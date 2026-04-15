@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Centralità della Persona — IA & Umanità</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+```
+:root {
+  --cream: #F5F0E8;
+  --ink: #1A1612;
+  --rust: #C4511F;
+  --warm-mid: #7A6A58;
+  --gold: #B8960C;
+  --paper: #EDE7DA;
+  --light-line: #D6CFC3;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .5;
+}
+
+/* ── NAVIGATION ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 4rem;
+  background: rgba(245,240,232,0.88);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--light-line);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--warm-mid);
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--rust); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 80px;
+}
+
+.hero-left {
+  padding: 8rem 4rem 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.2s;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 6vw, 6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.4s;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--rust);
+}
+
+.hero-subtitle {
+  margin-top: 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--warm-mid);
+  max-width: 440px;
+  line-height: 1.75;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.6s;
+}
+
+.hero-cta {
+  margin-top: 3.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rust);
+  padding-bottom: 4px;
+  transition: color 0.2s, gap 0.2s;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.8s;
+}
+
+.hero-cta:hover { color: var(--rust); gap: 1.6rem; }
+
+.hero-right {
+  background-color: var(--ink);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeIn 1.2s ease forwards 0.5s;
+}
+
+.hero-visual {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-diagram {
+  position: relative;
+  width: 380px;
+  height: 380px;
+}
+
+.circle-diagram svg {
+  width: 100%;
+  height: 100%;
+  animation: slowSpin 30s linear infinite;
+}
+
+.circle-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.circle-center-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.circle-center-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream);
+  letter-spacing: 0.04em;
+}
+
+.hero-quote {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  right: 3rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--warm-mid);
+  border-left: 2px solid var(--rust);
+  padding-left: 1.2rem;
+  line-height: 1.6;
+}
+
+/* ── SECTION BASE ── */
+section {
+  padding: 8rem 4rem;
+}
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.15;
+  max-width: 680px;
+}
+
+/* ── MANIFESTO SECTION ── */
+.manifesto {
+  background-color: var(--ink);
+  color: var(--cream);
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+.manifesto .section-title {
+  color: var(--cream);
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  line-height: 1.1;
+}
+
+.manifesto .section-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.manifesto-text {
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: #C8BFB2;
+}
+
+.manifesto-text p + p { margin-top: 1.5rem; }
+
+.manifesto-text strong {
+  color: var(--cream);
+  font-weight: 400;
+}
+
+/* ── PILLARS ── */
+.pillars {
+  background-color: var(--paper);
+}
+
+.pillars-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.pillar-card {
+  background: var(--cream);
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--rust);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.pillar-card:hover { background: #F0EAE0; }
+.pillar-card:hover::before { transform: scaleX(1); }
+
+.pillar-number {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--rust);
+  margin-bottom: 1.5rem;
+}
+
+.pillar-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.pillar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.pillar-desc {
+  font-size: 0.95rem;
+  color: var(--warm-mid);
+  line-height: 1.7;
+}
+
+/* ── CASES ── */
+.cases-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 4rem;
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+}
+
+.case-card {
+  border-top: 1px solid var(--light-line);
+  padding-top: 2.5rem;
+}
+
+.case-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: var(--rust);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.case-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.case-body {
+  font-size: 1rem;
+  color: var(--warm-mid);
+  line-height: 1.75;
+}
+
+.case-meta {
+  margin-top: 1.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ── QUOTE STRIP ── */
+.quote-strip {
+  background: var(--rust);
+  padding: 6rem 4rem;
+  text-align: center;
+}
+
+.quote-strip blockquote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream);
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  line-height: 1.4;
+}
+
+.quote-strip cite {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.6);
+  font-style: normal;
+}
+
+/* ── PRINCIPLES TABLE ── */
+.principles {
+  background: var(--cream);
+}
+
+.principles-header { margin-bottom: 4rem; }
+
+.table-wrapper {
+  border: 1px solid var(--light-line);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 60px 200px 1fr 180px;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid var(--light-line);
+  transition: background 0.2s;
+}
+
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: var(--paper); }
+
+.table-row.header {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.table-row.header span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--warm-mid);
+}
+
+.row-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--rust);
+}
+
+.row-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.row-desc {
+  font-size: 0.92rem;
+  color: var(--warm-mid);
+  line-height: 1.6;
+}
+
+.row-badge {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border: 1px solid currentColor;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.badge-high { color: var(--rust); }
+.badge-med { color: var(--gold); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  padding: 5rem 4rem 3rem;
+  color: var(--cream);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-brand {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+
+.footer-tagline {
+  font-size: 0.95rem;
+  color: #7A6A58;
+  line-height: 1.7;
+}
+
+.footer-col-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 1.5rem;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.footer-links a {
+  color: #7A6A58;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--cream); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: #4A3F35;
+}
+
+.footer-principle {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: #4A3F35;
+  font-size: 0.9rem;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { min-height: 40vh; }
+  .hero-left { padding: 6rem 1.5rem 3rem; }
+  section { padding: 5rem 1.5rem; }
+  .manifesto { grid-template-columns: 1fr; gap: 3rem; }
+  .pillars-grid { grid-template-columns: 1fr; gap: 2px; }
+  .cases-grid { grid-template-columns: 1fr; }
+  .cases-header { flex-direction: column; gap: 1rem; }
+  .table-row { grid-template-columns: 40px 1fr; gap: 1rem; }
+  .table-row .row-desc, .table-row .row-badge { display: none; }
+  .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+```
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+
+  <nav>
+    <div class="nav-logo">IA & Persona</div>
+    <ul class="nav-links">
+      <li><a href="#manifesto">Manifesto</a></li>
+      <li><a href="#pilastri">Pilastri</a></li>
+      <li><a href="#casi">Casi reali</a></li>
+      <li><a href="#principi">Principi</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+
+  <section class="hero" style="padding:0;">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Principio fondativo &nbsp;/&nbsp; Strategia Nazionale IA</p>
+      <h1 class="hero-title">La <em>persona</em><br>al centro<br>dell'intelligenza</h1>
+      <p class="hero-subtitle">L'Intelligenza Artificiale non è fine a se stessa. Ogni sistema, ogni algoritmo, ogni decisione automatizzata deve servire il benessere umano — non sostituirlo.</p>
+      <a href="#manifesto" class="hero-cta">Scopri il principio &nbsp;→</a>
+    </div>
+    <div class="hero-right">
+      <div class="hero-visual">
+        <div class="circle-diagram">
+          <svg viewBox="0 0 380 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer ring -->
+            <circle cx="190" cy="190" r="175" stroke="#2E2620" stroke-width="1"/>
+            <!-- Middle ring -->
+            <circle cx="190" cy="190" r="130" stroke="#3D3028" stroke-width="1" stroke-dasharray="4 8"/>
+            <!-- Inner ring -->
+            <circle cx="190" cy="190" r="80" stroke="#C4511F" stroke-width="1.5" stroke-dasharray="2 6"/>
+
+```
+        <!-- Orbit dots — outer -->
+        <circle cx="190" cy="15" r="5" fill="#C4511F"/>
+        <circle cx="355" cy="230" r="4" fill="#B8960C"/>
+        <circle cx="80" cy="340" r="4" fill="#7A6A58"/>
+        <circle cx="15" cy="130" r="3" fill="#7A6A58"/>
+        <circle cx="320" cy="55"  r="3" fill="#7A6A58"/>
+
+        <!-- Labels on outer ring -->
+        <text x="193" y="8" fill="#7A6A58" font-family="monospace" font-size="8" letter-spacing="2" text-anchor="middle">AUTONOMIA</text>
+        <text x="362" y="233" fill="#7A6A58" font-family="monospace" font-size="8" letter-spacing="2">DIGNITÀ</text>
+        <text x="20" y="127" fill="#7A6A58" font-family="monospace" font-size="8" letter-spacing="2" text-anchor="end">EQUITÀ</text>
+        <text x="60" y="350" fill="#7A6A58" font-family="monospace" font-size="8" letter-spacing="2">CURA</text>
+        <text x="300" y="48"  fill="#7A6A58" font-family="monospace" font-size="8" letter-spacing="2">TUTELA</text>
+
+        <!-- Connectors -->
+        <line x1="190" y1="20" x2="190" y2="110" stroke="#2E2620" stroke-width="0.8"/>
+        <line x1="348" y1="225" x2="270" y2="210" stroke="#2E2620" stroke-width="0.8"/>
+        <line x1="30" y1="130" x2="110" y2="165" stroke="#2E2620" stroke-width="0.8"/>
+        <line x1="82" y1="336" x2="148" y2="252" stroke="#2E2620" stroke-width="0.8"/>
+
+        <!-- Center glyph -->
+        <circle cx="190" cy="190" r="42" fill="#C4511F" opacity="0.12"/>
+        <circle cx="190" cy="190" r="28" fill="#C4511F" opacity="0.25"/>
+      </svg>
+      <div class="circle-center">
+        <div class="circle-center-icon">🧍</div>
+        <div class="circle-center-label">Persona</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-quote">
+    "La tecnologia dovrebbe amplificare<br>il meglio dell'umanità."<br>
+    <span style="font-style:normal; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.14em; color:#4A3F35;">— Principi etici UE sull'IA</span>
+  </div>
+</div>
+```
+
+  </section>
+
+  <!-- MANIFESTO -->
+
+  <section class="manifesto" id="manifesto">
+    <div>
+      <p class="section-label reveal">Manifesto</p>
+      <h2 class="section-title reveal">L'IA serve <em>l'uomo</em>,<br>non il contrario.</h2>
+    </div>
+    <div class="manifesto-text reveal">
+      <p>Il principio della <strong>Centralità della Persona</strong> stabilisce che qualsiasi sistema di intelligenza artificiale deve essere progettato, sviluppato e impiegato ponendo al centro i bisogni, i diritti e la dignità dell'essere umano.</p>
+      <p>Non si tratta di limitare l'innovazione tecnologica: si tratta di <strong>orientarla</strong>. L'IA è uno strumento potente, capace di trasformare medicina, istruzione, lavoro e vita quotidiana. Ma questa potenza acquista senso soltanto quando è messa al servizio del benessere delle persone.</p>
+      <p>Questo significa che ogni algoritmo deve poter essere compreso, contestato e corretto. Significa che nessuna decisione automatizzata dovrebbe privare una persona della propria <strong>autonomia</strong> o della possibilità di farsi ascoltare. Significa progettare con empatia, non solo con efficienza.</p>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+
+  <section class="pillars" id="pilastri">
+    <div class="pillars-header reveal">
+      <p class="section-label">I pilastri</p>
+      <h2 class="section-title">Sei dimensioni<br>della centralità umana</h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card reveal">
+        <div class="pillar-number">01</div>
+        <div class="pillar-icon">🧠</div>
+        <h3 class="pillar-title">Comprensibilità</h3>
+        <p class="pillar-desc">Le persone hanno il diritto di capire come e perché un sistema di IA prende decisioni che le riguardano. La spiegabilità non è un optional tecnico: è un requisito etico fondamentale.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-number">02</div>
+        <div class="pillar-icon">⚖️</div>
+        <h3 class="pillar-title">Controllo umano</h3>
+        <p class="pillar-desc">In ogni sistema che incide su diritti, libertà o opportunità delle persone, deve sempre essere garantita la supervisione e la possibilità di intervento umano. L'automazione non può essere cieca.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-number">03</div>
+        <div class="pillar-icon">🤝</div>
+        <h3 class="pillar-title">Inclusività</h3>
+        <p class="pillar-desc">I sistemi di IA devono essere accessibili a tutte le fasce della popolazione, indipendentemente da età, capacità, cultura o condizione economica. L'innovazione che esclude non è progresso.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-number">04</div>
+        <div class="pillar-icon">🛡️</div>
+        <h3 class="pillar-title">Protezione della dignità</h3>
+        <p class="pillar-desc">Nessun sistema di IA può essere utilizzato per umiliare, manipolare o ridurre la persona a mero dato. La dignità umana è inviolabile e precede ogni logica di ottimizzazione algoritmica.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-number">05</div>
+        <div class="pillar-icon">🌱</div>
+        <h3 class="pillar-title">Sviluppo del potenziale</h3>
+        <p class="pillar-desc">L'IA deve potenziare le capacità umane, non sostituirle passivamente. Il suo scopo è liberare tempo ed energie per attività più creative, relazionali e significative.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-number">06</div>
+        <div class="pillar-icon">🔄</div>
+        <h3 class="pillar-title">Ricorso e rimedio</h3>
+        <p class="pillar-desc">Chi subisce una decisione algoritmica ha diritto a contestarla e a ottenere una revisione umana. Senza meccanismi di ricorso effettivi, la centralità della persona rimane una dichiarazione vuota.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE STRIP -->
+
+  <div class="quote-strip">
+    <blockquote>"Un'IA veramente intelligente non cerca di essere umana. Cerca di rendere più umana la vita di chi la usa."</blockquote>
+    <cite>Riflessione sulla filosofia del design centrato sulla persona</cite>
+  </div>
+
+  <!-- CASI REALI -->
+
+  <section id="casi" style="background: var(--cream);">
+    <div class="cases-header">
+      <div class="reveal">
+        <p class="section-label">Casi reali</p>
+        <h2 class="section-title">Dove il principio<br>si fa concreta realtà</h2>
+      </div>
+    </div>
+    <div class="cases-grid">
+      <div class="case-card reveal">
+        <span class="case-tag">Sanità</span>
+        <h3 class="case-title">IA diagnostica con supervisione medica</h3>
+        <p class="case-body">In diversi ospedali europei, sistemi di IA affiancano i radiologi nell'individuare anomalie nelle immagini. Cruciale: il medico mantiene sempre l'ultima parola. L'algoritmo suggerisce, il professionista decide, il paziente viene informato e coinvolto.</p>
+        <div class="case-meta">Dominio: radiologia · Paese: UE · Approccio: human-in-the-loop</div>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">Istruzione</span>
+        <h3 class="case-title">Tutoraggio adattivo equo</h3>
+        <p class="case-body">Piattaforme educative basate su IA personalizzano i percorsi di apprendimento rispettando i ritmi di ogni studente. Progettate per ridurre — non amplificare — le disuguaglianze, offrono supporto maggiore a chi ne ha più bisogno.</p>
+        <div class="case-meta">Dominio: e-learning · Approccio: adaptive learning · Focus: equità</div>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">Welfare</span>
+        <h3 class="case-title">Assistenti virtuali per anziani</h3>
+        <p class="case-body">Sistemi conversazionali progettati per il supporto agli anziani soli, con attenzione alla semplicità d'uso e al rispetto della privacy. L'obiettivo non è sostituire la presenza umana, ma integrarla e segnalare situazioni di bisogno.</p>
+        <div class="case-meta">Dominio: assistenza sociale · Focus: autonomia · Rischio: basso</div>
+      </div>
+      <div class="case-card reveal">
+        <span class="case-tag">Giustizia</span>
+        <h3 class="case-title">Revisione umana obbligatoria nelle sentenze</h3>
+        <p class="case-body">Alcuni sistemi usano l'IA come strumento di analisi per i giudici, mai come decisore autonomo. Ogni output algoritmico viene accompagnato da documentazione esplicativa e il giudice è tenuto a motivare esplicitamente il proprio giudizio.</p>
+        <div class="case-meta">Dominio: giustizia · Requisito: spiegabilità · Supervisione: totale</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES TABLE -->
+
+  <section class="principles" id="principi" style="background: var(--paper);">
+    <div class="principles-header reveal">
+      <p class="section-label">Il quadro strategico</p>
+      <h2 class="section-title">Tutti i principi della Strategia Nazionale IA</h2>
+    </div>
+    <div class="table-wrapper reveal">
+      <div class="table-row header">
+        <span>#</span>
+        <span>Principio</span>
+        <span>Descrizione</span>
+        <span>Priorità</span>
+      </div>
+      <div class="table-row">
+        <div class="row-num">01</div>
+        <div class="row-title" style="color:var(--rust);">Centralità della Persona ★</div>
+        <div class="row-desc">L'IA è strumento al servizio dell'essere umano. Ogni sistema deve rispettare autonomia, dignità e benessere delle persone.</div>
+        <div class="row-badge badge-high">Alta priorità</div>
+      </div>
+      <div class="table-row">
+        <div class="row-num">02</div>
+        <div class="row-title">Equità</div>
+        <div class="row-desc">Nessun sistema di IA deve discriminare sulla base di genere, origine, condizione economica o caratteristiche personali.</div>
+        <div class="row-badge badge-high">Alta priorità</div>
+      </div>
+      <div class="table-row">
+        <div class="row-num">03</div>
+        <div class="row-title">Innovazione etica e responsabile</div>
+        <div class="row-desc">Lo sviluppo tecnologico deve procedere nel rispetto di norme etiche condivise, con meccanismi di responsabilizzazione chiari.</div>
+        <div class="row-badge badge-high">Alta priorità</div>
+      </div>
+      <div class="table-row">
+        <div class="row-num">04</div>
+        <div class="row-title">Sostenibilità</div>
+        <div class="row-desc">I sistemi di IA devono essere progettati considerando il loro impatto ambientale, sociale ed economico nel lungo periodo.</div>
+        <div class="row-badge badge-med">Media priorità</div>
+      </div>
+      <div class="table-row">
+        <div class="row-num">05</div>
+        <div class="row-title">Tutela dei diritti</div>
+        <div class="row-desc">I diritti e le libertà fondamentali — inclusa la privacy — non possono essere compressi da logiche di efficienza algoritmica.</div>
+        <div class="row-badge badge-high">Alta priorità</div>
+      </div>
+      <div class="table-row">
+        <div class="row-num">06</div>
+        <div class="row-title">Sicurezza dei sistemi</div>
+        <div class="row-desc">I modelli di IA devono essere affidabili, robusti e protetti da usi impropri, manipolazioni e attacchi informatici.</div>
+        <div class="row-badge badge-high">Alta priorità</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">IA & Persona</div>
+        <p class="footer-tagline">Un approfondimento sul principio della Centralità della Persona nella Strategia Nazionale per l'Intelligenza Artificiale. Progetto educativo individuale.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Sezioni</div>
+        <ul class="footer-links">
+          <li><a href="#manifesto">Manifesto</a></li>
+          <li><a href="#pilastri">I sei pilastri</a></li>
+          <li><a href="#casi">Casi reali</a></li>
+          <li><a href="#principi">Il quadro strategico</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Riferimenti</div>
+        <ul class="footer-links">
+          <li><a href="#">AI Act — Unione Europea</a></li>
+          <li><a href="#">Strategia Nazionale IA 2024–2026</a></li>
+          <li><a href="#">Linee guida AGID sull'IA</a></li>
+          <li><a href="#">Ethics Guidelines for Trustworthy AI</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 — Progetto educativo individuale &nbsp;/&nbsp; Tutti i diritti riservati</span>
+      <span class="footer-principle">«La persona prima di tutto.»</span>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Staggered pillar reveal
+    document.querySelectorAll('.pillar-card').forEach((card, i) => {
+      card.style.transitionDelay = `s`;
+    });
+  </script>
+
+</body>
+</html>
